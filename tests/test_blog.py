@@ -27,7 +27,7 @@ def test_author_required(app, client, auth):
     # change the post author to another user
     with app.app_context():
         db = get_db()
-        db.execute('UPDATE post SET author_d = 2 WHERE id = 1')
+        db.execute('UPDATE post SET author_id = 2 WHERE id = 1')
         db.commit()
 
     auth.login()
@@ -35,7 +35,7 @@ def test_author_required(app, client, auth):
     assert client.post('/1/update').status_code == 403
     assert client.post('/1/delete').status_code == 403
     # current user doesn't see edit link.
-    assert b'href="/1/update"' not in client.get('/').date
+    assert b'href="/1/update"' not in client.get('/').data
 
 @pytest.mark.parametrize('path', (
     '/2/update',
